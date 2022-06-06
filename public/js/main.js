@@ -29,8 +29,8 @@ function outputMessage(message) {
   const div = document.createElement("div");
   div.classList.add("message");
   div.innerHTML = `
-  <p class="meta">Ridwan <span>0:23am</span></p>
-    <p class="text">${message}</p>
+  <p class="meta">${message.username} <span>${message.time}</span></p>
+    <p class="text">${message.text}</p>
   `;
   chatMessages.append(div);
 }

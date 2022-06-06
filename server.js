@@ -21,7 +21,7 @@ io.on("connection", (socket) => {
     io.emit("message", "A user has left the chat");
   });
 });
-const PORT = 3000;
+const PORT = 3000 || process.env.PORT;
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

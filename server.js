@@ -17,9 +17,16 @@ io.on("connection", (socket) => {
 
   //Broadcast when a user connect
   socket.broadcast.emit("message", "A user has joined the chat");
+
   //   Runs when client disconnect
   socket.on("disconnect", () => {
     io.emit("message", "A user has left the chat");
+  });
+
+  // Listen for chat message
+  socket.on("chatMessage", (msg) => {
+    io.emit("message", msg);
+    console.log(msg);
   });
 });
 

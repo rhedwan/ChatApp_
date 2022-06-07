@@ -120,3 +120,7 @@ function outputUsers(users) {
 logOutBtn.addEventListener("click", function () {
   window.localStorage.removeItem("chats");
 });
+
+setTimeout(() => {
+  window.localStorage.removeItem("chats");
+}, 1000 * 60 * 30);

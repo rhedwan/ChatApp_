@@ -116,3 +116,7 @@ function outputUsers(users) {
   ${users.map((user) => `<li>${user.username}</li>`).join("")}
   `;
 }
+
+logOutBtn.addEventListener("click", function () {
+  window.localStorage.removeItem("chats");
+});

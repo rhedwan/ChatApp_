@@ -3,6 +3,16 @@ const chatMessages = document.querySelector(".chat-messages");
 const roomName = document.getElementById("room-name");
 const userList = document.getElementById("users");
 
+let chats;
+let existingChats = JSON.parse(localStorage.getItem("chats"));
+if (JSON.parse(localStorage.getItem("chats")) === null) {
+  chats = [];
+  console.log("adf");
+} else {
+  chats = existingChats;
+  console.log("af");
+}
+
 //Get username and room from url
 const { username, room } = Qs.parse(location.search, {
   ignoreQueryPrefix: true,
@@ -24,8 +34,20 @@ socket.on("roomUsers", ({ room, users }) => {
 
 // Message from server
 socket.on("message", (message) => {
-  outputMessage(message);
-  console.log(message);
+  // outputMessage(message);
+  // console.log(message);
+
+  if (typeof JSON.parse(window.localStorage.getItem("chats")) !== null) {
+    let chats = [];
+
+    window.localStorage.setItem("chats", JSON.stringify(chats));
+  }
+  chats.push(message);
+  window.localStorage.setItem("chats", JSON.stringify(chats));
+  existingChats = chats;
+
+  console.log(existingChats);
+  outputMessage(existingChats);
 
   // Scroll Down
   chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -46,15 +68,39 @@ chatForm.addEventListener("submit", function (e) {
 });
 
 // Output message to DOM
-function outputMessage(message) {
+function outputMessage(availableChats) {
   const div = document.createElement("div");
   div.classList.add("message");
-  div.innerHTML = `
-  <p class="meta">${message.username} <span>${message.time}</span></p>
-    <p class="text">${message.text}</p>
-  `;
-  chatMessages.append(div);
+
+  // div.innerHTML = `
+  // <p class="meta">${message.username} <span>${message.time}</span></p>
+  //   <p class="text">${message.text}</p>
+  // `;
+
+  // chatMessages.append(div);
+
+  // existingChats = JSON.parse(localStorage.getItem("chats"));
+  // console.log(existingChats);
+  // chats = existingChats;
+  // console.log(availableChats.map((i) => i.text));
+
+  availableChats.map((chat) => {
+    div.innerHTML = ` <p class="meta">${chat.username} <span>${chat.time}</span></p>
+    <p class="text">${chat.text}</p>`;
+    chatMessages.append(div);
+  });
 }
+
+function old(availableChats) {
+  chatMessages.innerHTML = `${availableChats
+    .map(
+      (chat) =>
+        `<div class='message'> <p class="meta">${chat.username} <span>${chat.time}</span></p> <p class="text">${chat.text}</p> </div>`
+    )
+    .join("")}`;
+}
+
+old(existingChats);
 
 // Add room name to DOM
 function outputRoomName(room) {
